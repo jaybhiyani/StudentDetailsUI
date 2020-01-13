@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5" style="margin-top: 5em;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Department</th>
+                    <th scope="col" colspan="2">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let department of departments; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{department.dep}}</td>
+                        <td><a class="btn btn-default" style="text-align:center;">Update</a></td>
+                        <td><a class="btn btn-default" style="text-align:center;">Delete</a></td>
+                    </tr>
+                </tbody>
+          </table>
+          <a routerLink="/departments/new" class="btn btn-primary">Add New Department</a>
+        </div>
+    </div>
+</div>

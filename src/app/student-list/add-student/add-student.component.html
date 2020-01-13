@@ -1,0 +1,48 @@
+ <!-- <div [formGroup] = "studentForm">
+    <div [formGroupName]="studentIndex">
+        <div class="form-group row mb-2">
+            <label class="col-md-2 col-form-label" attr.for="{{'firstNameId' + studentIndex}}">First Name</label>
+            <div class="col-md-8">
+                <input class="form-control" id="{{ 'firstNameId' + studentIndex }}" type="text"
+                    placeholder="First Name (required)" formControlName="firstName" />
+
+            </div>
+        </div>
+        <div class="form-group row mb-2">
+            <label class="col-md-2 col-form-label" attr.for="{{'lastNameId'+studentIndex}}">Last Name</label>
+            <div class="col-md-8">
+                <input class="form-control" id="{{'lastNameId'+studentIndex}}" type="text"
+                    placeholder="Last Name (required)" formControlName="lastName" />
+
+            </div>
+        </div>
+    </div>
+</div> -->
+<div [formGroup]="studentFormInput">
+    <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label">First Name</label>
+        <div class="col-md-8">
+            <input class="form-control" type="text"
+                placeholder="First Name (required)" formControlName="firstName" [ngClass]="{'is-invalid': (studentFormInput.get('firstName').touched || studentFormInput.get('firstName').dirty) && !studentFormInput.get('firstName').valid }" />
+            <span class="invalid-feedback">
+                <span *ngIf="studentFormInput.get('lastName').errors?.required">
+                    Please enter first name.
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label">Last Name</label>
+        <div class="col-md-8">
+            <input class="form-control" type="text"
+                placeholder="Last Name (required)" formControlName="lastName" [ngClass]="{'is-invalid': (studentFormInput.get('lastName').touched || studentFormInput.get('lastName').dirty) && !studentFormInput.get('lastName').valid }" />
+                <span class="invalid-feedback">
+                    <span *ngIf="studentFormInput.get('lastName').errors?.required">
+                      Please enter last name.
+                    </span>
+                </span>
+        </div>
+    </div>
+</div>
+
+{{studentFormInput.value | json}}
