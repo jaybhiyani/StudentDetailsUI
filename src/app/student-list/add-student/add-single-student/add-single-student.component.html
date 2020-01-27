@@ -1,6 +1,39 @@
-<div>
-    dropdown
+<div class="card">
+    <div class="card-header">
+        <h1>Add New Student</h1>
+    </div>
+    <div class="card-body">
+        <form novalidate
+        (ngSubmit)="save()"
+        [formGroup]="studentFormGroup">
+        <div class="row mb-2">
+        <div class="col-lg-2 mt-2">Department</div>
+        <div class="col-lg-2">
+        <!-- <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select Department
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" >Action</a>
+              <a class="dropdown-item" >Another action</a>
+              <a class="dropdown-item" >Something else here</a>
+            </div>
+          </div> -->
+          
+          <select formControlName='deptId'>
+            <option value=""selected disabled >Select Department</option>
+            <option *ngFor="let department of departments"value= {{department.id}} >{{department.dep}}</option>
+          
+          </select>
+        
+        </div>
+        </div>
+            <app-add-student [studentFormInput]="studentFormGroup"></app-add-student>
+            {{ studentFormGroup.controls.valid}}
+            <button class="btn btn-primary"  type="submit"
+                style="width:200px;"
+                [title]="studentFormGroup.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
+                [disabled]="!studentFormGroup.valid">Add Student</button>
+        </form>
+    </div>
 </div>
-<app-add-student [studentFormInput]="studentFormGroup"></app-add-student>
-
-<button (click)="addSingleStudent(studentFormGroup.value)"></button>

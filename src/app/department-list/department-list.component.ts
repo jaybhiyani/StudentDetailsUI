@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DepartmentService } from '../services/department.service';
 import { Department } from '../models/department.model';
 import { CommonService } from '../services/shared/common.service';
+import { Student } from '../models/student.model';
 
 @Component({
   selector: 'app-department-list',

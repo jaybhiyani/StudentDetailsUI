@@ -1,69 +1,55 @@
 <div class="card">
-    <div class="card-header">
-      <h1>Add New Department</h1><br>
-    </div>
-    <div class="card-body">
-        <form novalidate
-                (ngSubmit)="save()"
-                [formGroup]="departmentForm">
-                <div class="form-group row mb-2">
-                    <label class="col-md-2 col-form-label"
-                           for="departmentNameId">Department Name</label>
-                    <div class="col-md-8">
-                      <input class="form-control"
-                             id="departmentNameId"
-                             type="text"
-                             placeholder="Department Name (required)"  
-                             formControlName="departmentName"
-                             [ngClass]="{'is-invalid': (departmentForm.get('departmentName').touched || departmentForm.get('departmentName').dirty) && !departmentForm.get('departmentName').valid }" />
-                      <span class="invalid-feedback">
-                        <span *ngIf="departmentForm.get('departmentName').errors?.required">
-                          Please enter department name.
-                        </span>
-                        <span *ngIf="departmentForm.get('departmentName').errors?.minlength">
-                          The department name must be longer than 3 characters.
-                        </span>
-                      </span>
-                    </div>
-                </div>
-                <div formArrayName="students" *ngFor="let student of departmentForm.controls.students?.controls">
-                  <app-add-student [studentFormInput]="student"></app-add-student>
-                   <!-- <div [formGroupName]="i">
-                    <div class="form-group row mb-2">
-                      <label class="col-md-2 col-form-label" attr.for="{{'firstNameId' + i}}">First Name</label>
-                      <div class="col-md-8">
-                        <input class="form-control" id="{{ 'firstNameId' + i }}" type="text" placeholder="First Name (required)"
-                          formControlName="firstName" />
-                
-                      </div>
-                    </div>
-                    <div class="form-group row mb-2">
-                      <label class="col-md-2 col-form-label" attr.for="{{'lastNameId'+i}}">Last Name</label>
-                      <div class="col-md-8">
-                        <input class="form-control" id="{{'lastNameId'+i}}" type="text" placeholder="Last Name (required)"
-                          formControlName="lastName" />
-                
-                      </div>
-                    </div>
-                  </div>  -->
-                  <button class="col-md-1 btn btn-outline-warning btn-sm" type="button" (click)="popStudent(i)">Delete Button
-                  </button>
-                </div>
-                <button class="btn btn-outline-primary ml-5 mb-2"
-                type="button" (click)="pushStudent()">
-                  Add Student
-                </button>
-              <div class="row">
-                
-              <button class="btn btn-primary"
-                            type="submit"
-                            style="width:80px"
-                            [title]="departmentForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
-                            [disabled]="!departmentForm.valid || !departmentForm.controls.students?.controls.valid">
-                      Save
-              </button>
-              {{  departmentForm.controls.students?.controls.valid  | json}}
+  <div class="card-header">
+    <h1>{{pageTitle}}</h1><br>
+  </div>
+  <div class="card-body">
+    <form novalidate (ngSubmit)="save()" [formGroup]="departmentForm">
+      <div class="form-group row mb-2 col-lg-6">
+        <label class="col-form-label" for="departmentNameId">Department Name</label>
+        <div class="col-md-8">
+          <input class="form-control" id="departmentNameId" type="text" placeholder="Department Name (required)"
+            formControlName="dep"
+            [ngClass]="{'is-invalid': (departmentForm.get('dep').touched || departmentForm.get('dep').dirty) && !departmentForm.get('dep').valid }" />
+          <span class="invalid-feedback">
+            <span *ngIf="departmentForm.get('dep').errors?.required">
+              Please enter department name.
+            </span>
+            <span *ngIf="departmentForm.get('dep').errors?.minlength">
+              The department name must be longer than 3 characters.
+            </span>
+          </span>
+        </div>
+      </div>
+      <div formArrayName="students" *ngFor="let student of departmentForm.controls.students?.controls; let i = index">
+        <!-- <app-add-student [studentFormInput]="student"></app-add-student> -->
+        <div class="row">
+          <div class="col-lg-6">
+        <div [formGroupName]="i">
+          <div class="form-group row mb-2">
+            <label class="col-md-2 col-form-label" attr.for="{{'nameId' + i}}">Student Name</label>
+            <div class="col-md-8">
+              <input class="form-control" id="{{ 'nameId' + i }}" type="text" placeholder="Student Name (required)"
+                formControlName='name' />
             </div>
-        </form>
-    </div>
+          </div>
+          <input type="hidden" formControlName = 'sId' />
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <button class="col-md-1 btn btn-outline-warning btn-sm" type="button" (click)="popStudent(student.get('sId').value,student.get('name').value,i)">Delete
+        </button>
+      </div>
+      </div>
+      </div>
+      <button class="btn btn-outline-primary mb-2" type="button" (click)="pushStudent()">
+        Add Student
+      </button><br>
+
+      <button class="btn btn-primary" type="submit" style="width:80px"
+        [title]="departmentForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
+        [disabled]="!departmentForm.valid || !departmentForm.get('students').valid">
+        Save
+      </button>
+    </form>
+  </div>
 </div>

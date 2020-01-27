@@ -13,14 +13,14 @@ export class AddStudentComponent implements OnInit {
   constructor(private fb : FormBuilder) { }
 
   ngOnInit() {
-    this.studentFormInput = this.buildStudent();
+    // debugger;
+    // this.studentFormInput = this.buildStudent();
     // this.studentFormChange.emit(this.studentFormInput);
   }
   buildStudent(): FormGroup
   {
     return this.fb.group({
-      firstName: ['',Validators.required],
-      lastName: ['',Validators.required]
+      name: ['',Validators.required]
     });
   }
 

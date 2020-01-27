@@ -1,1 +1,30 @@
-<p>student-list works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5" style="margin-top: 5em;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Student</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Department</th>
+                    <th scope="col" colspan="2">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let student of students; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{student.name}}</td>
+                        <td>{{student.firstName}}</td>
+                        <td>{{student.lastName}}</td>
+                        <td>{{student.departmentId}}</td>
+                        <td><a class="btn btn-default" style="text-align:center;">Update</a></td>
+                        <td><a class="btn btn-default" style="text-align:center;">Delete</a></td>
+                    </tr>
+                </tbody>
+          </table>
+          <a routerLink="/students/new" class="btn btn-primary">Add New Student</a>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Department } from 'src/app/models/department.model';
 import { AddStudentComponent } from 'src/app/student-list/add-student/add-student.component';
+import { Subscription } from 'rxjs';
+import { DepartmentService } from 'src/app/services/department.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { StudentService } from 'src/app/services/student.service';
 
 @Component({
   selector: 'app-add-department',
@@ -10,51 +14,111 @@ import { AddStudentComponent } from 'src/app/student-list/add-student/add-studen
 })
 export class AddDepartmentComponent implements OnInit {
   departmentForm: FormGroup;
-  Department = new Department();
-  //addStudentComponent: AddStudentComponent = new AddStudentComponent();
-  // studentForm : any;
-  // getStudentFormArray(): FormArray{
-  //   return this.departmentForm.get('students') as FormArray;
+  changesMade: boolean = false;
+  //Department = new Department();
+  department: Department;
+  private sub = Subscription;
+  errorMessage: any;
+  pageTitle = "Add New Department";
+
+  // get students(): FormArray {
+  //   return <FormArray>this.departmentForm.get('students');
   // }
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private departmentService: DepartmentService, private studentService: StudentService, private router: ActivatedRoute, private route: Router) {
 
   }
 
   ngOnInit() {
     this.departmentForm = this.fb.group({
-      departmentName:['',[Validators.required,Validators.minLength(3)]],
+      dep: ['', [Validators.required, Validators.minLength(3)]],
       students: this.fb.array([
         //this.buildStudent()
       ])
     });
     console.log(this.departmentForm);
-    
+    let id = +this.router.snapshot.paramMap.get('id');
+    this.getDepartment(id);
   }
-  save()
-  {
+  save() {
     console.log(this.departmentForm.value);
+    if(this.departmentForm.valid){
+      if(this.departmentForm.dirty || this.changesMade){
+        const d = { ...this.department, ...this.departmentForm.value };
+        console.log(d);
+
+        if(d.id === 0) {
+          console.log("Create Product Implementation");
+        } else {
+          debugger;
+          let id = +this.router.snapshot.paramMap.get('id');
+          console.log(id);
+          this.departmentService.updateDepartment(id,d)
+          .subscribe({
+            next: () => this.onSaveComplete(),
+            error: err => console.log(err)
+          });
+        }
+      }
+    }
   }
   buildStudent(): FormGroup {
     return this.fb.group({
-      firstName:'',
-      lastName:'' 
+      sId: '',
+      name: '',
+      departmentId: ''
     });
-    //return;
-    
   }
-  // studentFormEmit(event)
-  // {
-  //   debugger;
-  //   console.log(event);
-  //   this.eve =event;
-  // }
-  
-  pushStudent(): void{
+
+  pushStudent(): void {
     (this.departmentForm.controls.students as FormArray).push(this.buildStudent());
   }
 
-  popStudent(index: number){
-    (this.departmentForm.controls.students as FormArray).removeAt(index);
+  popStudent(studentId: number, studentName: string, index: number) {
+    this.changesMade = true;
+    console.log(studentId);
+    if (confirm(`Delete Student : ${studentName}?`)){
+      this.studentService.deleteStudent(studentId).subscribe();
+      console.log(`${studentName} deleted`);
+      (this.departmentForm.controls.students as FormArray).removeAt(index);
+    }
+    
   }
 
+  getDepartment(id: number) {
+    this.departmentService.getDepartment(id).subscribe({
+      next: (dept: Department) => this.displayDepartment(dept),
+      error: err => this.errorMessage = err
+    });
+  }
+  displayDepartment(dep: Department) {
+    if (this.departmentForm) {
+      this.departmentForm.reset();
+    }
+    this.department = dep;
+
+    if (this.department.id === 0) {
+      this.pageTitle = "Add New Department";
+    }
+    else {
+      this.departmentForm.patchValue({
+        dep: this.department.dep
+      });
+      //this.departmentForm.setControl('students',this.fb.array(this.department.students || []));
+      this.department.students.forEach(student => {
+        (this.departmentForm.controls.students as FormArray).push(
+          this.fb.group({
+            sId: [student.sId],
+            name: [student.name, Validators.required],
+            departmentId: [student.departmentId]
+          })
+        )
+      });
+      console.log(this.departmentForm.controls.students);
+    }
+
+  }
+  onSaveComplete(){
+    this.departmentForm.reset();
+    this.route.navigate(['/departments']);
+  }
 }

@@ -18,31 +18,19 @@
         </div>
     </div>
 </div> -->
-<div [formGroup]="studentFormInput">
+<!-- <div [formGroup]="studentFormInput">
     <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label">First Name</label>
+        <label class="col-md-2 col-form-label">Student Name</label>
         <div class="col-md-8">
             <input class="form-control" type="text"
-                placeholder="First Name (required)" formControlName="firstName" [ngClass]="{'is-invalid': (studentFormInput.get('firstName').touched || studentFormInput.get('firstName').dirty) && !studentFormInput.get('firstName').valid }" />
+                placeholder="Student Name (required)" formControlName="name" [ngClass]="{'is-invalid': (studentFormInput.get('name')?.touched || studentFormInput.get('name')?.dirty) && !studentFormInput.get('name')?.valid }" />
             <span class="invalid-feedback">
-                <span *ngIf="studentFormInput.get('lastName').errors?.required">
-                    Please enter first name.
+                <span *ngIf="studentFormInput.get('name')?.errors?.required">
+                    Please enter student name.
                 </span>
             </span>
         </div>
     </div>
-    <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label">Last Name</label>
-        <div class="col-md-8">
-            <input class="form-control" type="text"
-                placeholder="Last Name (required)" formControlName="lastName" [ngClass]="{'is-invalid': (studentFormInput.get('lastName').touched || studentFormInput.get('lastName').dirty) && !studentFormInput.get('lastName').valid }" />
-                <span class="invalid-feedback">
-                    <span *ngIf="studentFormInput.get('lastName').errors?.required">
-                      Please enter last name.
-                    </span>
-                </span>
-        </div>
-    </div>
-</div>
+</div> -->
 
-{{studentFormInput.value | json}}
+<!-- {{studentFormInput.value | json}} -->

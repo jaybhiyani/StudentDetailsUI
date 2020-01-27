@@ -11,6 +11,7 @@ import { AddDepartmentComponent } from './department-list/add-department/add-dep
 import { ReactiveFormsModule } from '@angular/forms';
 import { StudentListComponent } from './student-list/student-list.component';
 import { AddStudentComponent } from './student-list/add-student/add-student.component';
+import { AddSingleStudentComponent } from './student-list/add-student/add-single-student/add-single-student.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AddStudentComponent } from './student-list/add-student/add-student.comp
     DepartmentDetailsComponent,
     AddDepartmentComponent,
     StudentListComponent,
-    AddStudentComponent
+    AddStudentComponent,
+    AddSingleStudentComponent
   ],
   imports: [  
     BrowserModule,
