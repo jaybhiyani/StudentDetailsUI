@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { DepartmentService } from 'src/app/services/department.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
+import { isNullOrUndefined } from 'util';
+import { isEmpty } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-department',
@@ -41,31 +43,35 @@ export class AddDepartmentComponent implements OnInit {
   }
   save() {
     console.log(this.departmentForm.value);
-    if(this.departmentForm.valid){
-      if(this.departmentForm.dirty || this.changesMade){
+    if (this.departmentForm.valid) {
+      if (this.departmentForm.dirty || this.changesMade) {
         const d = { ...this.department, ...this.departmentForm.value };
         console.log(d);
 
-        if(d.id === 0) {
-          console.log("Create Product Implementation");
-        } else {
-          debugger;
-          let id = +this.router.snapshot.paramMap.get('id');
-          console.log(id);
-          this.departmentService.updateDepartment(id,d)
+        if (d.id === 0) {
+          // console.log("Create Product Implementation");
+          this.departmentService.createDeparment(d)
           .subscribe({
             next: () => this.onSaveComplete(),
             error: err => console.log(err)
           });
+        } else {
+          let id = +this.router.snapshot.paramMap.get('id');
+          console.log(id);
+          this.departmentService.updateDepartment(id, d)
+            .subscribe({
+              next: () => this.onSaveComplete(),
+              error: err => console.log(err)
+            });
         }
       }
     }
   }
   buildStudent(): FormGroup {
     return this.fb.group({
-      sId: '',
+      sId: 0,
       name: '',
-      departmentId: ''
+      departmentId: 0
     });
   }
 
@@ -76,12 +82,16 @@ export class AddDepartmentComponent implements OnInit {
   popStudent(studentId: number, studentName: string, index: number) {
     this.changesMade = true;
     console.log(studentId);
-    if (confirm(`Delete Student : ${studentName}?`)){
-      this.studentService.deleteStudent(studentId).subscribe();
-      console.log(`${studentName} deleted`);
+    if (studentId.toString() !== '') {
+      if (confirm(`Delete Student : ${studentName}?`)) {
+        this.studentService.deleteStudent(studentId).subscribe();
+        console.log(`${studentName} deleted`);
+        (this.departmentForm.controls.students as FormArray).removeAt(index);
+      }
+    } else {
       (this.departmentForm.controls.students as FormArray).removeAt(index);
     }
-    
+
   }
 
   getDepartment(id: number) {
@@ -100,6 +110,7 @@ export class AddDepartmentComponent implements OnInit {
       this.pageTitle = "Add New Department";
     }
     else {
+      this.pageTitle = "Edit Department: " + this.department.dep;
       this.departmentForm.patchValue({
         dep: this.department.dep
       });
@@ -117,7 +128,7 @@ export class AddDepartmentComponent implements OnInit {
     }
 
   }
-  onSaveComplete(){
+  onSaveComplete() {
     this.departmentForm.reset();
     this.route.navigate(['/departments']);
   }

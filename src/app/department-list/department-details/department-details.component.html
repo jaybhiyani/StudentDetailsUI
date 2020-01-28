@@ -10,6 +10,8 @@
         <tr *ngFor="let student of department?.students; let i = index">
             <td>{{i+1}}</td>
             <td>{{student.name}}</td>
+            <td><a class="btn btn-default" [routerLink] = "[student.sId,'edit']" style="text-align:center;">Update</a></td>
+            <td><a class="btn btn-default" style="text-align:center;">Delete</a></td>
         </tr>
     </tbody>
 </table>

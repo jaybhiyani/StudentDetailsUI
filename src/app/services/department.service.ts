@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Department } from '../models/department.model';
 import { Observable, of, throwError } from 'rxjs';
-import {HttpClient,HttpHeaders} from '@angular/common/http';
+import {HttpClient,HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DepartmentService {
+  
   readonly rootUrl = "http://localhost:64159/api/department";
-  formData :  Department
+  formData :  Department;
+  
   constructor(private httpClient : HttpClient) { 
     
   }
@@ -36,18 +38,8 @@ export class DepartmentService {
     return {
       id : 0,
       dep : null,
-      students: null
+      students: []
     };
-  }
-  private handleError(err) {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
-    }
-    console.error(err);
-    return throwError(errorMessage);
   }
   updateDepartment(id: number,department: Department){
     const headers = new HttpHeaders({'Content-Type':'application/json'});
@@ -56,6 +48,35 @@ export class DepartmentService {
     .pipe(
       tap(() => console.log("updateDepartment "+department.id)),
       map(() => department),
+      catchError(this.handleError)
+    );
+  }
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage: string;
+
+    if (err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+    }
+    //console.error(err);
+    return throwError(errorMessage);
+  }
+  createDeparment(department: Department): Observable<Department>{
+    const headers = new HttpHeaders({'Content-Type':'application/json'});
+    return this.httpClient.post<Department>(this.rootUrl, department, {headers: headers});
+  }
+  deleteDepartment(id: number): Observable<{}>{
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.rootUrl}/${id}`;
+    return this.httpClient.delete<Department>(url, {headers});
+  }
+
+  searchDepartment(searchString: string): Observable<Department[]> {
+    const url = `${this.rootUrl}/search/${searchString}`;
+    return this.httpClient.get<Department[]>(url)
+    .pipe(
+      ///tap(data => console.log('getDepartment: '+ JSON.stringify(data))),  
       catchError(this.handleError)
     );
   }

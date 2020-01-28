@@ -21,7 +21,11 @@ const routes: Routes = [
   {path: 'departments/new', component: AddDepartmentComponent},
   {path: 'students', component: StudentListComponent},
   {path: 'students/new', component: AddSingleStudentComponent},
-  {path: 'departments/:id/students', component: DepartmentDetailsComponent},
+  {path: 'departments/:id/students', component: DepartmentDetailsComponent,
+    children: [
+      //{path: ':sId/edit', component: }
+    ]
+  },
   {path: 'departments/:id/edit', component: AddDepartmentComponent},
 
   
