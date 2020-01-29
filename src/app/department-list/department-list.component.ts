@@ -14,6 +14,8 @@ export class DepartmentListComponent implements OnInit {
   departments : Department[];
   searchDepartmentForm: FormGroup;
   notFoundMessage: string = null;
+  sortOrder: string = '-';
+  ordered = 0;
   constructor(private fb: FormBuilder, private departmentService : DepartmentService, private c: CommonService){}
 
   ngOnInit() {
@@ -48,12 +50,40 @@ export class DepartmentListComponent implements OnInit {
   }
   searchDepartment(): void{
     // console.log();
+    if(this.searchDepartmentForm.controls.searchString.value !== ''){
     this.departmentService.searchDepartment(this.searchDepartmentForm.controls.searchString.value).subscribe({
       next: departments => {
-        this.departments = departments
+        this.departments = departments;
         this.notFoundMessage = null;
       },
       error: err => this.notFoundMessage = err
     });
+  } else {
+    this.notFoundMessage = null;
+    this.getDepartments();
+  }
+  }
+  orderBy() {
+    if(this.ordered == 0){
+      this.ordered = 1;
+      this.sortOrder = '^';
+      this.departmentService.orderBy(this.sortOrder).subscribe({
+        next: orderedDepartments => this.departments = orderedDepartments
+      });
+    } else{
+    if(this.ordered == 1){
+      this.ordered = 2;
+      this.sortOrder = 'v';
+      this.departmentService.orderBy(this.sortOrder).subscribe({
+        next: orderedDepartments => this.departments = orderedDepartments
+      });
+    } else{
+      if(this.ordered == 2){
+        this.ordered = 0;
+        this.sortOrder = '-';
+        this.getDepartments();
+      }
+    }
+  }
   }
 }

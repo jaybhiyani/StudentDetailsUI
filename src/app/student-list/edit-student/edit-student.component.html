@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-header">
+        <h1>Edit Student</h1><br>
+    </div>
+    <div class="card-body">
+        <form (ngSubmit)="save()" [formGroup]="studentEditForm">
+            <div class="form-group row mb-2 col-lg-6">
+                <label class="col-form-label" for="studentNameId">Student Name</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="studentNameId" type="text" formControlName="name">
+                </div>
+                <button class="btn btn-warning" type="submit">Edit</button>
+            </div>
+        </form>
+    </div>
+</div>

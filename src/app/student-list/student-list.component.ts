@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Student } from '../models/student.model';
 import { CommonService } from '../services/shared/common.service';
 import { Department } from '../models/department.model';
+import { StudentService } from '../services/student.service';
 
 @Component({
   selector: 'app-student-list',
@@ -12,7 +13,7 @@ export class StudentListComponent implements OnInit {
   id : number;
   students: Student[];
   department: Department;
-  constructor(private c: CommonService) { }
+  constructor(private c: CommonService, private studentService: StudentService) { }
 
   ngOnInit() {
     this.getStudents();
@@ -25,4 +26,14 @@ export class StudentListComponent implements OnInit {
   // {
   //   this.c.getSingleEntity<Department>(id,"http://localhost:64159/api/department").subscribe(department => this.department = department);
   // }
+  deleteStudent(id: number, name: string) {
+    if(confirm(`Delete student: ${name}?`)){
+      this.studentService.deleteStudent(id).subscribe({
+        next: () => this.refreshPage()
+      });
+    }
+  }
+  refreshPage(){
+    this.getStudents();
+  }
 }

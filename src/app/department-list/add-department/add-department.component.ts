@@ -6,8 +6,6 @@ import { Subscription } from 'rxjs';
 import { DepartmentService } from 'src/app/services/department.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
-import { isNullOrUndefined } from 'util';
-import { isEmpty } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-department',
@@ -19,7 +17,6 @@ export class AddDepartmentComponent implements OnInit {
   changesMade: boolean = false;
   //Department = new Department();
   department: Department;
-  private sub = Subscription;
   errorMessage: any;
   pageTitle = "Add New Department";
 
@@ -51,10 +48,10 @@ export class AddDepartmentComponent implements OnInit {
         if (d.id === 0) {
           // console.log("Create Product Implementation");
           this.departmentService.createDeparment(d)
-          .subscribe({
-            next: () => this.onSaveComplete(),
-            error: err => console.log(err)
-          });
+            .subscribe({
+              next: () => this.onSaveComplete(),
+              error: err => console.log(err)
+            });
         } else {
           let id = +this.router.snapshot.paramMap.get('id');
           console.log(id);
@@ -82,10 +79,10 @@ export class AddDepartmentComponent implements OnInit {
   popStudent(studentId: number, studentName: string, index: number) {
     this.changesMade = true;
     console.log(studentId);
-    if (studentId.toString() !== '') {
+    if (studentId != 0) {
       if (confirm(`Delete Student : ${studentName}?`)) {
         this.studentService.deleteStudent(studentId).subscribe();
-        console.log(`${studentName} deleted`);
+        //console.log(`${studentName} deleted`);
         (this.departmentForm.controls.students as FormArray).removeAt(index);
       }
     } else {

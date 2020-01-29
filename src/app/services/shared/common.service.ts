@@ -15,7 +15,6 @@ export class CommonService {
   }
   getSingleEntity<T>(id: number, url: string){
     this.urlWithParam = `${url}/${id}`;
-    console.log(this.urlWithParam);
     return this.httpClient.get<T>(this.urlWithParam);
   }
 }

@@ -80,5 +80,17 @@ export class DepartmentService {
       catchError(this.handleError)
     );
   }
-  
+  orderBy(order: string) : Observable<Department[]> {
+    let url : string = '';
+    if(order == '^') {
+       url = `${this.rootUrl}/sort/a`;
+    }
+    if(order == 'v') {
+       url = `${this.rootUrl}/sort/d`;
+    }
+    return this.httpClient.get<Department[]>(url)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
 }
