@@ -1,28 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Department } from 'src/app/models/department.model';
-import { AddStudentComponent } from 'src/app/student-list/add-student/add-student.component';
-import { Subscription } from 'rxjs';
 import { DepartmentService } from 'src/app/services/department.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
 
 @Component({
   selector: 'app-add-department',
-  templateUrl: './add-department.component.html',
-  styleUrls: ['./add-department.component.css']
+  templateUrl: './add-department.component.html'
 })
 export class AddDepartmentComponent implements OnInit {
   departmentForm: FormGroup;
   changesMade: boolean = false;
-  //Department = new Department();
   department: Department;
-  errorMessage: any;
+  errorMessage: string;
   pageTitle = "Add New Department";
 
-  // get students(): FormArray {
-  //   return <FormArray>this.departmentForm.get('students');
-  // }
+  
   constructor(private fb: FormBuilder, private departmentService: DepartmentService, private studentService: StudentService, private router: ActivatedRoute, private route: Router) {
 
   }
@@ -30,35 +24,28 @@ export class AddDepartmentComponent implements OnInit {
   ngOnInit() {
     this.departmentForm = this.fb.group({
       dep: ['', [Validators.required, Validators.minLength(3)]],
-      students: this.fb.array([
-        //this.buildStudent()
-      ])
+      students: this.fb.array([])
     });
-    console.log(this.departmentForm);
     let id = +this.router.snapshot.paramMap.get('id');
     this.getDepartment(id);
   }
   save() {
-    console.log(this.departmentForm.value);
     if (this.departmentForm.valid) {
       if (this.departmentForm.dirty || this.changesMade) {
         const d = { ...this.department, ...this.departmentForm.value };
-        console.log(d);
 
         if (d.id === 0) {
-          // console.log("Create Product Implementation");
           this.departmentService.createDeparment(d)
             .subscribe({
               next: () => this.onSaveComplete(),
-              error: err => console.log(err)
+              error: err => this.errorMessage = err
             });
         } else {
           let id = +this.router.snapshot.paramMap.get('id');
-          console.log(id);
           this.departmentService.updateDepartment(id, d)
             .subscribe({
               next: () => this.onSaveComplete(),
-              error: err => console.log(err)
+              error: err => this.errorMessage = err
             });
         }
       }
@@ -66,9 +53,9 @@ export class AddDepartmentComponent implements OnInit {
   }
   buildStudent(): FormGroup {
     return this.fb.group({
-      sId: 0,
-      name: '',
-      departmentId: 0
+      sId: [0],
+      name: [''],
+      departmentId: [0]
     });
   }
 
@@ -80,9 +67,8 @@ export class AddDepartmentComponent implements OnInit {
     this.changesMade = true;
     console.log(studentId);
     if (studentId != 0) {
-      if (confirm(`Delete Student : ${studentName}?`)) {
+      if (confirm(`Are you sure you want to delete student : ${studentName}?`)) {
         this.studentService.deleteStudent(studentId).subscribe();
-        //console.log(`${studentName} deleted`);
         (this.departmentForm.controls.students as FormArray).removeAt(index);
       }
     } else {
@@ -111,7 +97,6 @@ export class AddDepartmentComponent implements OnInit {
       this.departmentForm.patchValue({
         dep: this.department.dep
       });
-      //this.departmentForm.setControl('students',this.fb.array(this.department.students || []));
       this.department.students.forEach(student => {
         (this.departmentForm.controls.students as FormArray).push(
           this.fb.group({
@@ -121,9 +106,7 @@ export class AddDepartmentComponent implements OnInit {
           })
         )
       });
-      console.log(this.departmentForm.controls.students);
     }
-
   }
   onSaveComplete() {
     this.departmentForm.reset();

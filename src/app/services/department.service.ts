@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Department } from '../models/department.model';
 import { Observable, of, throwError } from 'rxjs';
-import {HttpClient,HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient,HttpHeaders, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
+import { QueryParameters } from '../models/queryParameters.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,13 @@ export class DepartmentService {
   
   readonly rootUrl = "http://localhost:64159/api/department";
   formData :  Department;
+  queryParameters: QueryParameters = new QueryParameters();
   
   constructor(private httpClient : HttpClient) { 
     
   }
-  getDepartments(): Observable<Department[]> {
-    return this.httpClient.get<Department[]>(this.rootUrl);
+  getDepartments(queryParameters : QueryParameters): Observable<Department[]> {
+    return this.httpClient.post<Department[]>(this.rootUrl+"/list",queryParameters);
   }
 
   // postDepartment(): Observable<Department[]> {
@@ -72,23 +74,16 @@ export class DepartmentService {
     return this.httpClient.delete<Department>(url, {headers});
   }
 
-  searchDepartment(searchString: string): Observable<Department[]> {
-    const url = `${this.rootUrl}/search/${searchString}`;
-    return this.httpClient.get<Department[]>(url)
+  searchDepartment(queryParameters : QueryParameters): Observable<Department[]> {
+    const url = `${this.rootUrl}/list`;
+    return this.httpClient.post<Department[]>(url, queryParameters)
     .pipe(
-      ///tap(data => console.log('getDepartment: '+ JSON.stringify(data))),  
       catchError(this.handleError)
     );
   }
-  orderBy(order: string) : Observable<Department[]> {
-    let url : string = '';
-    if(order == '^') {
-       url = `${this.rootUrl}/sort/a`;
-    }
-    if(order == 'v') {
-       url = `${this.rootUrl}/sort/d`;
-    }
-    return this.httpClient.get<Department[]>(url)
+  orderBy(queryParameters : QueryParameters) : Observable<Department[]> {
+    let url = `${this.rootUrl}/list`;
+    return this.httpClient.post<Department[]>(url, queryParameters)
     .pipe(
       catchError(this.handleError)
     );

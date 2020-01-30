@@ -19,9 +19,9 @@ export class EditStudentComponent implements OnInit {
 
   ngOnInit() {
     this.studentEditForm = this.fb.group({
-      sId: 0,
+      sId: [0],
       name: '',
-      departmentId: 0
+      departmentId: [0]
     });
     let id = this.getIdFromUrl();
     this.getStudent(id);
@@ -54,7 +54,7 @@ export class EditStudentComponent implements OnInit {
         let id = this.getIdFromUrl();
         this.studentService.editStudent(id, s).subscribe({
           next: () => this.onSaveComplete(),
-          error: err => console.log(err)
+          error: err => this.errorMessage = err
         });
       }
     }
@@ -66,7 +66,6 @@ export class EditStudentComponent implements OnInit {
       this.router.navigate([`/departments/${departmentId}/students`]);
     }
     else{
-      let studentId = +this.activatedRoute.snapshot.paramMap.get('sId');
       this.router.navigate([`/students`]);
     }
   }

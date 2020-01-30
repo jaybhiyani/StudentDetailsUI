@@ -2,20 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { DepartmentService } from '../services/department.service';
 import { Department } from '../models/department.model';
 import { CommonService } from '../services/shared/common.service';
-import { Student } from '../models/student.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { QueryParameters } from '../models/queryParameters.model';
 
 @Component({
   selector: 'app-department-list',
-  templateUrl: './department-list.component.html',
-  styleUrls: ['./department-list.component.css']
+  templateUrl: './department-list.component.html'
 })
 export class DepartmentListComponent implements OnInit {
   departments : Department[];
   searchDepartmentForm: FormGroup;
-  notFoundMessage: string = null;
-  sortOrder: string = '-';
-  ordered = 0;
+  resultLength: number = -1;
+  queryParameters : QueryParameters = new QueryParameters();
+
   constructor(private fb: FormBuilder, private departmentService : DepartmentService, private c: CommonService){}
 
   ngOnInit() {
@@ -27,8 +26,9 @@ export class DepartmentListComponent implements OnInit {
   }
   getDepartments() : void
   {
-    // debugger;
-    this.departmentService.getDepartments().subscribe(dep => this.departments = dep);
+    this.queryParameters.searchString = "";
+    this.queryParameters.sortOrder = "";
+    this.departmentService.getDepartments(this.queryParameters).subscribe(dep => this.departments = dep);
   }
 
   getDep(): void{
@@ -49,41 +49,25 @@ export class DepartmentListComponent implements OnInit {
     }
   }
   searchDepartment(): void{
-    // console.log();
-    if(this.searchDepartmentForm.controls.searchString.value !== ''){
-    this.departmentService.searchDepartment(this.searchDepartmentForm.controls.searchString.value).subscribe({
-      next: departments => {
-        this.departments = departments;
-        this.notFoundMessage = null;
-      },
-      error: err => this.notFoundMessage = err
-    });
-  } else {
-    this.notFoundMessage = null;
+    if(this.searchDepartmentForm.controls.searchString.value != ''){
+      this.queryParameters.searchString = this.searchDepartmentForm.controls.searchString.value;
+      this.queryParameters.sortOrder = "";
+      this.departmentService.searchDepartment(this.queryParameters).subscribe({
+        next: departments => {
+          this.departments = departments;
+          this.resultLength =  this.departments.length;
+        },
+        error: err => console.log(err)
+      });
+    } else {
+    this.resultLength = -1;
     this.getDepartments();
   }
   }
   orderBy() {
-    if(this.ordered == 0){
-      this.ordered = 1;
-      this.sortOrder = '^';
-      this.departmentService.orderBy(this.sortOrder).subscribe({
-        next: orderedDepartments => this.departments = orderedDepartments
+    this.queryParameters.sortOrder = "d";
+    this.departmentService.orderBy(this.queryParameters).subscribe({
+      next: orderedDepartments => this.departments = orderedDepartments
       });
-    } else{
-    if(this.ordered == 1){
-      this.ordered = 2;
-      this.sortOrder = 'v';
-      this.departmentService.orderBy(this.sortOrder).subscribe({
-        next: orderedDepartments => this.departments = orderedDepartments
-      });
-    } else{
-      if(this.ordered == 2){
-        this.ordered = 0;
-        this.sortOrder = '-';
-        this.getDepartments();
-      }
-    }
-  }
   }
 }

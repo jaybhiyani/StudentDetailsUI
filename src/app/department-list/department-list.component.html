@@ -24,15 +24,15 @@
                     
                     <tr>
                         <th scope="col">No.</th>
-                        <th scope="col">Department <button class="btn btn-sm btn-primary" (click) = "orderBy()">{{sortOrder}}</button> </th>
+                        <th scope="col">Department <button class="btn btn-sm btn-default" (click) = "orderBy()"><i class="fa fa-sort"></i></button> </th>
                         <th scope="col">Students</th>
                         <th scope="col" colspan="2">Actions</th>
                     </tr>
-                    <div *ngIf = "notFoundMessage !== null"  class="alert alert-danger col-md-6">
+                    <div *ngIf = "resultLength == 0"  class="alert alert-danger col-md-6">
                         No results found!
                     </div>
                 </thead>
-                <tbody *ngIf = "notFoundMessage === null" >
+                <tbody *ngIf = "resultLength == -1 || resultLength != 0" >
                     <tr *ngFor="let department of departments; let i = index">
                         <td>{{i+1}}</td>
                         <td>{{department.dep}}</td>

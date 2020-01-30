@@ -4,18 +4,12 @@ import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-student',
-  templateUrl: './add-student.component.html',
-  styleUrls: ['./add-student.component.css']
+  templateUrl: './add-student.component.html'
 })
 export class AddStudentComponent implements OnInit {
-  @Input() studentFormInput: FormGroup;
-  // @Output() studentFormChange = new EventEmitter<FormGroup>();
   constructor(private fb : FormBuilder) { }
 
   ngOnInit() {
-    // debugger;
-    // this.studentFormInput = this.buildStudent();
-    // this.studentFormChange.emit(this.studentFormInput);
   }
   buildStudent(): FormGroup
   {
