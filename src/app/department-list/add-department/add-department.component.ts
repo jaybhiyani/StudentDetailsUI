@@ -89,7 +89,7 @@ export class AddDepartmentComponent implements OnInit {
     }
     this.department = dep;
 
-    if (this.department.id === 0) {
+    if (this.department.id == 0) {
       this.pageTitle = "Add New Department";
     }
     else {

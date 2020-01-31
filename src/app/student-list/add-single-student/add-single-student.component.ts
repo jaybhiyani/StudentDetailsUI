@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Student } from 'src/app/models/student.model';
-import { CommonService } from 'src/app/services/shared/common.service';
 import { Department } from 'src/app/models/department.model';
 import { StudentService } from 'src/app/services/student.service';
 import { Router } from '@angular/router';
@@ -42,9 +41,6 @@ queryParameters: QueryParameters = new QueryParameters();
     this.queryParameters.sortOrder = "";
     this.departmentService.getDepartments(this.queryParameters).subscribe(dep => this.departments = dep);
   }
-  // getDep(): void{
-  //   this.c.getEntity<Department[]>("http://localhost:64159/api/department").subscribe(dep => this.departments = dep);
-  // }
   onSaveComplete(){
     this.studentFormGroup.reset();
     this.router.navigate(['/students']);

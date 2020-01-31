@@ -1,22 +1,13 @@
 <div style="text-align:center">
     <h1>
-        Welcome to College
+        College Management
     </h1>
 </div>
-<div class="container-fluid">
-    <!-- <nav>
-        <div class="row">
-            <div class="col-lg-6">
-                <a routerLink="/departments" routerLinkActive="active" class="btn btn-default">Departments</a>
-            </div>
-            <div class="col-lg-6">
-                <a routerLink="/students" routerLinkActive="active" class="btn btn-default">Students</a>
-            </div>
-        </div>
-    </nav> -->
-    <nav>
-        <a routerLink="/departments" routerLinkActive="active" class="btn btn-default"style="margin-left:30%;">Departments</a>
-        <a routerLink="/students" routerLinkActive="active" class="btn btn-default"style="margin-left:30%;">Students</a>
+<div>
+    <nav class="navbar navbar-light bg-light">
+        <a routerLink="/departments" class="btn" style="margin-left:30%;">Departments</a>
+        <a routerLink="/students" class="btn" style="margin-right:30%;">Students</a>
     </nav>
 </div>
+<br>
 <router-outlet></router-outlet>

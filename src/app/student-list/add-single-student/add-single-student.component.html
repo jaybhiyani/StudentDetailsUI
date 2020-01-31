@@ -16,11 +16,21 @@
       <div class="form-group row mb-2 col-lg-6">
         <label class="col-form-label" for="studentNameId">Student Name</label>
         <div class="col-md-8">
-            <input class="form-control" id="studentNameId" type="text" placeholder="Student Name" formControlName="name">
+            <input class="form-control" id="studentNameId" type="text" placeholder="Student Name" formControlName="name" 
+            [ngClass]="{'is-invalid': (studentFormGroup.get('name').touched || studentFormGroup.get('name').dirty) && !studentFormGroup.get('name').valid }">
+            <span class="invalid-feedback">
+              <span *ngIf="studentFormGroup.get('name').errors?.required">
+                Please enter student name.
+              </span>
+            </span>  
         </div>
     </div>
       <div class="row">
-        <button class="btn btn-primary" type="submit" style="width:200px;">Add Student</button>
+        <button class="btn btn-primary" type="submit" style="width:200px;"
+        [title]="studentFormGroup.valid ? 'Save your entered data' : 'Disabled until the form data is filled properly'"
+        [disabled]="!studentFormGroup.valid">
+        Add Student
+        </button>
       </div>
     </form>
   </div>

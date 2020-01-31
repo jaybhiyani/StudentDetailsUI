@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Department } from '../models/department.model';
 import { Observable, of, throwError } from 'rxjs';
 import {HttpClient,HttpHeaders, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { QueryParameters } from '../models/queryParameters.model';
 
 @Injectable({
@@ -32,7 +32,6 @@ export class DepartmentService {
     const url = `${this.rootUrl}/${id}`;
     return this.httpClient.get<Department>(url)
     .pipe(
-      tap(data => console.log('getDepartment: '+ JSON.stringify(data))),
       catchError(this.handleError)
     );
   }
@@ -48,7 +47,6 @@ export class DepartmentService {
     const url = `${this.rootUrl}/${department.id}`;
     return this.httpClient.put<Department>(url,department,{headers:headers})
     .pipe(
-      tap(() => console.log("updateDepartment "+department.id)),
       map(() => department),
       catchError(this.handleError)
     );

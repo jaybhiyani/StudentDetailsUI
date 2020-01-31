@@ -17,15 +17,11 @@ export class StudentListComponent implements OnInit {
 
   ngOnInit() {
     this.getStudents();
-    //this.getDepartmentForStudent(this.id);
   }
   getStudents(): void{
-    this.c.getEntity<Student[]>("http://localhost:64159/api/student").subscribe(student => this.students = student);
+    this.studentService.getStudents().subscribe(students => this.students = students);
+    //this.c.getEntity<Student[]>("http://localhost:64159/api/student").subscribe(student => this.students = student);
   }
-  // getDepartmentForStudent(id: number)
-  // {
-  //   this.c.getSingleEntity<Department>(id,"http://localhost:64159/api/department").subscribe(department => this.department = department);
-  // }
   deleteStudent(id: number, name: string) {
     if(confirm(`Delete student: ${name}?`)){
       this.studentService.deleteStudent(id).subscribe({

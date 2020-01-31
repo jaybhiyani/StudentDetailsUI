@@ -21,7 +21,6 @@
         </div>
       </div>
       <div formArrayName="students" *ngFor="let student of departmentForm.controls.students?.controls; let i = index">
-        <!-- <app-add-student [studentFormInput]="student"></app-add-student> -->
         <div class="row">
           <div class="col-lg-6">
         <div [formGroupName]="i">
@@ -37,7 +36,8 @@
         </div>
       </div>
       <div class="col-lg-6">
-        <button class="col-md-1 btn btn-outline-warning btn-sm" type="button" (click)="popStudent(student.get('sId').value,student.get('name').value,i)">Delete
+        <button class="col-md-1 btn btn-outline-warning btn-sm" type="button" (click)="popStudent(student.get('sId').value,student.get('name').value,i)">
+          Delete
         </button>
       </div>
       </div>

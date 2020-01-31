@@ -14,6 +14,9 @@ export class StudentService {
   constructor(private httpClient : HttpClient) { 
     
   }
+  getStudents(): Observable<Student[]> {
+    return this.httpClient.get<Student[]>(this.rootUrl);
+  }
   deleteStudent(id: number): Observable<{}>{
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.rootUrl}/${id}`;
